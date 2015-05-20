@@ -1,0 +1,103 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.chortitzer.industria.web.bean.fps;
+
+import com.chortitzer.industria.web.domain.fps.TblFpsLotes;
+import com.chortitzer.industria.web.service.fps.Service_fps;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.CellEditEvent;
+import org.springframework.context.annotation.Scope;
+
+/**
+ *
+ * @author Industria
+ */
+@Named
+@Scope("view")
+public class LotesBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Inject
+    Service_fps service;
+
+    private List<TblFpsLotes> tblFpsLotesList;    
+    private DataTable dt;
+
+    Calendar calendar = Calendar.getInstance();
+
+    private String mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+    private String ano = String.valueOf(calendar.get(Calendar.YEAR));
+
+    public LotesBean() {
+        
+    }
+
+    @PostConstruct
+    private void init() {
+          tblFpsLotesList = service.getAll(TblFpsLotes.class);        
+    }
+
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+        
+        if(newValue != null && !newValue.equals(oldValue)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            //dt = (TblFpsLotesList)event.getSource();
+            service.save(tblFpsLotesList.get(event.getRowIndex()));
+            
+            if(tblFpsLotesList.get(event.getRowIndex()).getId()==null){
+                tblFpsLotesList = service.getAll(TblFpsLotes.class);    
+            }
+            System.out.println(tblFpsLotesList.get(event.getRowIndex()).getId());
+        }
+    }
+    
+    /**
+     * @return the tblFpsLotesList
+     */
+    public List<TblFpsLotes> getTblFpsLotesList() {
+        return tblFpsLotesList;
+    }
+
+    /**
+     * @param tblFpsLotesList the tblFpsLotesList to set
+     */
+    public void setTblFpsLotesList(List<TblFpsLotes> tblFpsLotesList) {
+        this.tblFpsLotesList = tblFpsLotesList;
+    }
+    
+    public void addLote(){
+        TblFpsLotes newLote = new TblFpsLotes();
+        newLote.setFecha(new Date());
+        newLote.setIdFabrica(tblFpsLotesList.get(tblFpsLotesList.size()-1).getIdFabrica()+1);
+        service.save(newLote);        
+        tblFpsLotesList = service.getAll(TblFpsLotes.class); 
+        //tblFpsLotesList.add(newLote);
+    }
+    
+    public void deleteLote(TblFpsLotes lote){
+        service.delete(lote);        
+        tblFpsLotesList = service.getAll(TblFpsLotes.class); 
+    }
+    
+    public void save(){
+         service.save(tblFpsLotesList);
+        
+    }
+
+
+
+}

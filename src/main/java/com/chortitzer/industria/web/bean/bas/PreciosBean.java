@@ -5,8 +5,8 @@
  */
 package com.chortitzer.industria.web.bean.bas;
 
+import com.chortitzer.industria.web.dao.bas.Dao_bas;
 import com.chortitzer.industria.web.domain.bas.Precios;
-import com.chortitzer.industria.web.service.bas.Service_bas;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -17,27 +17,24 @@ import org.springframework.context.annotation.Scope;
 @Named
 @Scope("view")
 public class PreciosBean implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Inject
-    Service_bas service;
+    Dao_bas dao;
 
-    private List<Precios> preciosList;    
+    private List<Precios> preciosList;
     private List<Precios> preciosFilteredList;
 
     @PostConstruct
-    private void init() {        
+    private void init() {
         getPreciosList();
     }
-
-    
-    
-
 
     /**
      * @return the preciosList
      */
     public List<Precios> getPreciosList() {
-        preciosList = service.getAll(Precios.class);
+        preciosList = dao.getAll(Precios.class);
         return preciosList;
     }
 

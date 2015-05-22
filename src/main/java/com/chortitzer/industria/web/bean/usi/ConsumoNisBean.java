@@ -6,8 +6,8 @@
 package com.chortitzer.industria.web.bean.usi;
 
 import com.chortitzer.industria.web.bean.common.CommonBean;
+import com.chortitzer.industria.web.dao.usi.Dao_usi;
 import com.chortitzer.industria.web.domain.usi.ConsumoNisModel;
-import com.chortitzer.industria.web.service.usi.Service_usi;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,11 +25,11 @@ import org.springframework.context.annotation.Scope;
 public class ConsumoNisBean {
 
     @Inject
-    Service_usi service;
+    Dao_usi dao;
 
     @Inject
     CommonBean commonBean;
-    
+
     List<ConsumoNisModel> consumoNisList;
     private List<ConsumoNisModel> consumoNisFilteredList;
     private List<String> mesList = new ArrayList<>();
@@ -64,7 +64,7 @@ public class ConsumoNisBean {
     }
 
     public List<ConsumoNisModel> getConsumoNisList() {
-        List<ConsumoNisModel> list = service.getConsumoNis(mes, ano);
+        List<ConsumoNisModel> list = dao.getConsumoNis(mes, ano);
         return list;
     }
 
@@ -147,7 +147,7 @@ public class ConsumoNisBean {
     /**
      * @return the mesLetras
      */
-    public String getMesLetras() {       
+    public String getMesLetras() {
         return commonBean.mesInttoString(mes);
     }
 

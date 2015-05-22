@@ -46,4 +46,14 @@ public interface Dao_bas {
     List<Integer> getDalAnosAll();
 
     List<TblDalLotes> getLotesByEmpresaAndAno(int idEmpresa, int ano);
+
+    List<Tblproductos> getAllSesammoProductos();
+
+    List<Tblproductos> getAllGranosProductos();
+
+    <T> List<T> getViewByDateRangeAndProducto(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblproductos producto);
+
+    <T> List<T> getViewByDateRangeAndEmpresa(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblempresa empresa);
+
+    <T> List<T> getViewByDateRangeAndEmpresaAndProducto(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblempresa empresa, Tblproductos producto);
 }

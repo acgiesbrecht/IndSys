@@ -5,7 +5,7 @@
  */
 package com.chortitzer.industria.web.bean.usi;
 
-import com.chortitzer.industria.web.service.usi.Service_usi;
+import com.chortitzer.industria.web.dao.usi.Dao_usi;
 import com.vividsolutions.jts.geom.Point;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +36,6 @@ import org.geotools.jdbc.JDBCDataStore;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.primefaces.event.FileUploadEvent;
@@ -51,7 +50,7 @@ import org.springframework.context.annotation.Scope;
 public class ActualizarBaseBean {
 
     @Inject
-    Service_usi service;
+    Dao_usi dao;
 
     private String status;
     private Boolean up = true;
@@ -166,8 +165,8 @@ public class ActualizarBaseBean {
                 gpx.setVersion("1.1");
                 gpx.setCreator("CIN-CCH");
 
-                GPXParser parser = new GPXParser();                
-                
+                GPXParser parser = new GPXParser();
+
                 FileOutputStream out = new FileOutputStream("\\industria\\gis\\nis.gpx");
                 parser.writeGPX(gpx, out);
 

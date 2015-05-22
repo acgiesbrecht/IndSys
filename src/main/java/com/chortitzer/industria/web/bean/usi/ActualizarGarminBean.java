@@ -5,7 +5,7 @@
  */
 package com.chortitzer.industria.web.bean.usi;
 
-import com.chortitzer.industria.web.service.usi.Service_usi;
+import com.chortitzer.industria.web.dao.usi.Dao_usi;
 import com.vividsolutions.jts.geom.Point;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,15 +47,14 @@ import org.springframework.context.annotation.Scope;
 public class ActualizarGarminBean {
 
     @Inject
-    Service_usi service;
+    Dao_usi dao;
 
-    private String status;    
+    private String status;
     private Boolean up = true;
     private StreamedContent download;
     private int fileCounter = 0;
     private File shapeFile;
-    String tempDir = System.getProperty("java.io.tmpdir");  
-    
+    String tempDir = System.getProperty("java.io.tmpdir");
 
     public ActualizarGarminBean() {
 
@@ -66,7 +65,7 @@ public class ActualizarGarminBean {
         up = true;
     }
 
-    public void refresh(){
+    public void refresh() {
         FacesContext context = FacesContext.getCurrentInstance();
         String viewId = context.getViewRoot().getViewId();
         ViewHandler handler = context.getApplication().getViewHandler();
@@ -74,10 +73,10 @@ public class ActualizarGarminBean {
         root.setViewId(viewId);
         context.setViewRoot(root);
     }
-    
+
     private void process(File file) {
         try {
-            //copyFile(event.getFile().getFileName(), event.getFile().getInputstream());                                                
+            //copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
 
             FileDataStore store = FileDataStoreFinder.getDataStore(file);
             System.out.println(store.getInfo().getTitle());
@@ -122,9 +121,9 @@ public class ActualizarGarminBean {
             gpx.setCreator("CIN-CCH");
 
             GPXParser parser = new GPXParser();
-            
+
             System.out.println(tempDir + "\\nis.gpx");
-            
+
             FileOutputStream out = new FileOutputStream(tempDir + "\\nis.gpx");
             parser.writeGPX(gpx, out);
 
@@ -134,25 +133,25 @@ public class ActualizarGarminBean {
             up = false;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {            
+        } finally {
         }
     }
 
     public void upload(FileUploadEvent event) {
         FacesMessage msg = new FacesMessage("Exito! ", event.getFile().getFileName() + " fue cargado.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        try {                        
-            String string = event.getFile().getFileName();            
-            String extension = string.substring(string.length()-3, string.length());
+        try {
+            String string = event.getFile().getFileName();
+            String extension = string.substring(string.length() - 3, string.length());
 
             File file = new File(tempDir, string);
             FileUtils.copyInputStreamToFile(event.getFile().getInputstream(), file);
-            if(extension.equals("shp")){
+            if (extension.equals("shp")) {
                 shapeFile = file;
             }
-            fileCounter++;            
-            if(fileCounter==5){
-                process(shapeFile);            
+            fileCounter++;
+            if (fileCounter == 5) {
+                process(shapeFile);
                 fileCounter = 0;
             }
         } catch (Exception ex) {

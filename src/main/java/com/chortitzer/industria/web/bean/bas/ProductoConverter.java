@@ -5,8 +5,8 @@
  */
 package com.chortitzer.industria.web.bean.bas;
 
+import com.chortitzer.industria.web.dao.bas.Dao_bas;
 import com.chortitzer.industria.web.domain.bas.Tblproductos;
-import com.chortitzer.industria.web.service.bas.Service_bas;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -26,13 +26,13 @@ import org.springframework.context.annotation.Scope;
 public class ProductoConverter implements Converter {
 
     @Inject
-    Service_bas service;
+    Dao_bas dao;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
         if (value != null && value.trim().length() > 0 && StringUtils.isNumeric(value)) {
-            return service.findByPk(Tblproductos.class, Integer.parseInt(value));
+            return dao.findByPk(Tblproductos.class, Integer.parseInt(value));
         } else {
             return null;
         }

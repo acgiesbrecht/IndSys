@@ -5,9 +5,8 @@
  */
 package com.chortitzer.industria.web.bean.usi;
 
+import com.chortitzer.industria.web.dao.usi.Dao_usi;
 import com.chortitzer.industria.web.domain.usi.NisSinLecturaModel;
-import com.chortitzer.industria.web.domain.usi.NisUsuario;
-import com.chortitzer.industria.web.service.usi.Service_usi;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,7 +24,7 @@ import org.springframework.context.annotation.Scope;
 public class NisSinLecturaBean {
 
     @Inject
-    Service_usi service;
+    Dao_usi dao;
 
     List<NisSinLecturaModel> nisSinLecturaList;
     private List<NisSinLecturaModel> nisSinLecturaFilteredList;
@@ -61,7 +60,7 @@ public class NisSinLecturaBean {
     }
 
     public List<NisSinLecturaModel> getNisSinLecturaList() {
-        nisSinLecturaList = service.getNisSinLectura(mes, ano);
+        nisSinLecturaList = dao.getNisSinLectura(mes, ano);
         listCount = nisSinLecturaList.size();
         return nisSinLecturaList;
     }
@@ -125,14 +124,14 @@ public class NisSinLecturaBean {
     }
 
     public String formatNis(String s) {
-        try{
+        try {
             return s.substring(0, 1) + "-" + s.substring(1, 4) + "-" + s.substring(4, 7);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }finally{
+        } finally {
             return "ERROR";
         }
-        
+
     }
 
     /**

@@ -5,8 +5,8 @@
  */
 package com.chortitzer.industria.web.bean.bas;
 
+import com.chortitzer.industria.web.dao.bas.Dao_bas;
 import com.chortitzer.industria.web.domain.bas.Tblempresa;
-import com.chortitzer.industria.web.service.bas.Service_bas;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,24 +20,23 @@ import org.springframework.context.annotation.Scope;
  *
  * @author Industria
  */
-
 @Named
 @Scope("view")
 @FacesConverter("com.chortitzer.industria.web.bean.bas.EmpresaConverter")
 public class EmpresaConverter implements Converter {
 
     @Inject
-    Service_bas service;
+    Dao_bas dao;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {
-        if(value != null && value.trim().length() > 0 && StringUtils.isNumeric(value)) {
-            return service.findByPk(Tblempresa.class, Integer.parseInt(value));            
+        if (value != null && value.trim().length() > 0 && StringUtils.isNumeric(value)) {
+            return dao.findByPk(Tblempresa.class, Integer.parseInt(value));
         } else {
             return null;
         }
-        
+
     }
 
     @Override

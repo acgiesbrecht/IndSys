@@ -5,10 +5,9 @@
  */
 package com.chortitzer.industria.web.bean.fps;
 
+import com.chortitzer.industria.web.dao.fps.Dao_fps;
 import com.chortitzer.industria.web.domain.fps.FpsAvgValueModel;
-import com.chortitzer.industria.web.service.fps.Service_fps;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -16,8 +15,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang.time.DateUtils;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.springframework.context.annotation.Scope;
@@ -29,7 +26,7 @@ public class VaporBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    Service_fps service;
+    Dao_fps dao;
 
     private LineChartModel dataModel;
 
@@ -118,15 +115,15 @@ public class VaporBean implements Serializable {
         LineChartSeries series1 = new LineChartSeries();
         series1.setLabel("Temp");
 
-        List<FpsAvgValueModel> dataList = service.getAvgFpsParamByDateRange(25, fechaDesde, fechaHasta);
+        List<FpsAvgValueModel> dataList = dao.getAvgFpsParamByDateRange(25, fechaDesde, fechaHasta);
         int i = 1;
         for (FpsAvgValueModel d : dataList) {
             //series1.set(d.getFechahora().getTime(),  Integer.valueOf((int) Math.round(d.getValor())) );
-            series1.set(String.valueOf(i),  Integer.valueOf((int) Math.round(d.getValor())) );
+            series1.set(String.valueOf(i), Integer.valueOf((int) Math.round(d.getValor())));
             i++;
             //System.out.println(d.getFechahora().getTime() + ", " + Integer.valueOf((int) Math.round(d.getValor())).toString());
             System.out.println(String.valueOf(i) + ", " + Integer.valueOf((int) Math.round(d.getValor())).toString());
-            
+
         }
 
         dataModel.addSeries(series1);
@@ -134,12 +131,12 @@ public class VaporBean implements Serializable {
         //dataModel.setTitle("Zoom for Details");
         //dataModel.setZoom(true);
         /*dataModel.getAxis(AxisType.Y).setLabel("Values");
-        DateAxis axis = new DateAxis("Dates");
-        axis.setTickAngle(-50);
-        //axis.setMax("2014-02-01");
-        axis.setTickFormat("%d/%#b/%y - %H:%M");
+         DateAxis axis = new DateAxis("Dates");
+         axis.setTickAngle(-50);
+         //axis.setMax("2014-02-01");
+         axis.setTickFormat("%d/%#b/%y - %H:%M");
 
-        dataModel.getAxes().put(AxisType.X, axis);*/
+         dataModel.getAxes().put(AxisType.X, axis);*/
     }
 
     /**

@@ -5,8 +5,8 @@
  */
 package com.chortitzer.industria.web.bean.fps;
 
+import com.chortitzer.industria.web.dao.fps.Dao_fps;
 import com.chortitzer.industria.web.domain.fps.FpsHorarioReactorModel;
-import com.chortitzer.industria.web.service.fps.Service_fps;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,7 +24,7 @@ public class HorarioReactorBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    Service_fps service;
+    Dao_fps dao;
 
     private Date fecha;
     private FpsHorarioReactorModel r1;
@@ -168,13 +168,13 @@ public class HorarioReactorBean implements Serializable {
      */
     public List<FpsHorarioReactorModel> getReactoresList() {
         reactoresList = new ArrayList<>();
-        reactoresList.add(service.getHorario(fecha, 1));
-        reactoresList.add(service.getHorario(fecha, 2));
-        reactoresList.add(service.getHorario(fecha, 3));
-        reactoresList.add(service.getHorario(fecha, 4));
-        reactoresList.add(service.getHorario(fecha, 5));
-        reactoresList.add(service.getHorario(fecha, 6));
-        reactoresList.add(service.getHorario(fecha, 7));
+        reactoresList.add(dao.getHorario(fecha, 1));
+        reactoresList.add(dao.getHorario(fecha, 2));
+        reactoresList.add(dao.getHorario(fecha, 3));
+        reactoresList.add(dao.getHorario(fecha, 4));
+        reactoresList.add(dao.getHorario(fecha, 5));
+        reactoresList.add(dao.getHorario(fecha, 6));
+        reactoresList.add(dao.getHorario(fecha, 7));
         return reactoresList;
     }
 

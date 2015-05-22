@@ -35,18 +35,21 @@ public class DaoImpl_bas implements Dao_bas {
         this.em = em;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T> List<T> getAll(Class<T> klass) {
         return em.createQuery("Select t from " + klass.getSimpleName() + " t")
                 .getResultList();
     }
 
+    @Override
     public <T> T save(T t) {
         T newRecord = null;
         newRecord = em.merge(t);
         return newRecord;
     }
 
+    @Override
     public <T> void delete(T t) {
         em.remove(em.merge(t));
         em.flush();
@@ -57,6 +60,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.find(type, o);
     }
 
+    @Override
     public <T> List<T> getByDateRange(Class<T> klass, String DateColumn, Date startDate, Date endDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String sQuery = "Select t from " + klass.getSimpleName() + " t where t." + DateColumn + " between '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'"
@@ -65,6 +69,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createQuery(sQuery).getResultList();
     }
 
+    @Override
     public <T> List<T> getByDateRangeAndProducto(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblproductos producto) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String sQuery = "Select t from " + klass.getSimpleName() + " t where t." + DateColumn + " between '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'"
@@ -73,6 +78,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createQuery(sQuery).getResultList();
     }
 
+    @Override
     public <T> List<T> getByDateRangeAndEmpresa(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblempresa empresa) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String sQuery = "Select t from " + klass.getSimpleName() + " t where t." + DateColumn + " between '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'"
@@ -81,6 +87,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createQuery(sQuery).getResultList();
     }
 
+    @Override
     public <T> List<T> getByDateRangeAndEmpresaAndProducto(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblempresa empresa, Tblproductos producto) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String sQuery = "Select t from " + klass.getSimpleName() + " t where t." + DateColumn + " between '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'"
@@ -90,6 +97,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createQuery(sQuery).getResultList();
     }
 
+    @Override
     public List<DalResumenFibraModel> getResumenByLote(String lote) {
         String sQuery = "SELECT descripcion AS tipo, "
                 + "                        mic AS micronaire, "
@@ -108,6 +116,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createNativeQuery(sQuery, DalResumenFibraModel.class).getResultList();
     }
 
+    @Override
     public List<DalResumenFibraModel> getResumenByAno(int ano) {
         String sQuery = "SELECT descripcion AS tipo, "
                 + "                        mic AS micronaire, "
@@ -127,6 +136,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createNativeQuery(sQuery, DalResumenFibraModel.class).getResultList();
     }
 
+    @Override
     public List<Integer> getDalAnosAll() {
         String sQuery = "SELECT CAST(EXTRACT(YEAR FROM fechahora_apertura) AS int) AS ano "
                 + "FROM tbl_dal_lotes "
@@ -134,6 +144,7 @@ public class DaoImpl_bas implements Dao_bas {
         return (List<Integer>) em.createNativeQuery(sQuery).getResultList();
     }
 
+    @Override
     public List<TblDalLotes> getLotesByEmpresaAndAno(int idEmpresa, int ano) {
         String sQuery = "SELECT * "
                 + "FROM tbl_dal_lotes "
@@ -142,6 +153,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createNativeQuery(sQuery, TblDalLotes.class).getResultList();
     }
 
+    @Override
     public List<DalLiquidacionModel> getLiquidacionByAno(int ano) {
         String sQuery = "SELECT id, "
                 + "                        fechahora, "
@@ -156,6 +168,7 @@ public class DaoImpl_bas implements Dao_bas {
         return em.createNativeQuery(sQuery, DalLiquidacionModel.class).getResultList();
     }
 
+    @Override
     public List<DalLiquidacionModel> getLiquidacionByLote(String lote) {
         String sQuery = "SELECT id, "
                 + "                        fechahora, "
@@ -168,6 +181,51 @@ public class DaoImpl_bas implements Dao_bas {
                 + "                        AND id_lote = " + lote
                 + "                        AND bruto > -1 AND tara > -1";
         return em.createNativeQuery(sQuery, DalLiquidacionModel.class).getResultList();
+    }
+
+    @Override
+    public List<Tblproductos> getAllSesammoProductos() {
+        String sQuery = "SELECT * FROM tblproductos WHERE descripcion LIKE '%Sesamo %' AND materiaprima = 1";
+        return em.createNativeQuery(sQuery, Tblproductos.class).getResultList();
+    }
+
+    @Override
+    public List<Tblproductos> getAllGranosProductos() {
+        String sQuery = "SELECT * FROM tblproductos WHERE ("
+                + "descripcion LIKE '%Maiz %' OR "
+                + "descripcion LIKE '%Sorgo %' OR "
+                + "descripcion LIKE '%Soja %' OR "
+                + "descripcion LIKE '%Trigo %'"
+                + ") AND materiaprima = 1";
+        return em.createNativeQuery(sQuery, Tblproductos.class).getResultList();
+    }
+
+    @Override
+    public <T> List<T> getViewByDateRangeAndProducto(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblproductos producto) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String sQuery = "Select t from " + klass.getSimpleName() + " t where t." + DateColumn + " between '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'"
+                + " and t.idProducto = " + producto.getId().toString()
+                + " and t.bruto > -1 and t.tara > -1";
+        return em.createQuery(sQuery).getResultList();
+    }
+
+    @Override
+    public <T> List<T> getViewByDateRangeAndEmpresa(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblempresa empresa) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String sQuery = "Select t from " + klass.getSimpleName() + " t where t." + DateColumn + " between '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'"
+                + " and t.idProductor = " + empresa.getId().toString()
+                + " and t.bruto > -1 and t.tara > -1";
+        return em.createQuery(sQuery).getResultList();
+    }
+
+    @Override
+    public <T> List<T> getViewByDateRangeAndEmpresaAndProducto(Class<T> klass, String DateColumn, Date startDate, Date endDate, Tblempresa empresa, Tblproductos producto) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String sQuery = "Select t from " + klass.getSimpleName() + " t where t." + DateColumn + " between '" + sdf.format(startDate) + "' and '" + sdf.format(endDate) + "'"
+                + " and t.idProductor = " + empresa.getId().toString()
+                + " and t.idProducto = " + producto.getId().toString()
+                + " and t.bruto > -1 and t.tara > -1";
+        return em.createQuery(sQuery).getResultList();
     }
 
 }
